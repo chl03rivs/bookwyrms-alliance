@@ -3,6 +3,12 @@ from users.models import UserProfile
 from django.contrib.auth.models import User
 
 # Create your models here.
+class Category(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+        
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to the user's profile
     post_title = models.CharField(max_length=255)
@@ -10,11 +16,17 @@ class Post(models.Model):
     # book = models.ForeignKey(Book)
     slug = models.SlugField(max_length=200, unique=True)
     body = models.TextField()
-    category = models.CharField(max_length=20)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)  # Link to Category model
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.post_title
+
+    # Auto-generate slug from the post's title
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.post_title)
+        super(Post, self).save(*args, **kwargs)
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to the user's profile
