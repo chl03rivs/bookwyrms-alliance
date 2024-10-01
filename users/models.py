@@ -7,8 +7,7 @@ class UserProfile(models.Model):
     bio = models.TextField(blank=True)
     location = models.CharField(max_length=50, blank=True)
     website = models.URLField(blank=True)
-    # Commented out for now: requires Pillow
-    # profile_picture = models.ImageField(blank=True, upload_to='media/profile_pics')
+    profile_picture = models.ImageField(blank=True, upload_to='media/profile_pics')
 
     def __str__(self):
         return self.user.username
