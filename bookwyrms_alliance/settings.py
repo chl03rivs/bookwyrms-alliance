@@ -33,7 +33,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['.herokuapp.com', '8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net']
 
-
+# Trusted origins for requests
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.codeinstitute-ide.net/",
+    "https://*.herokuapp.com"
+]
 # Application definition
 
 INSTALLED_APPS = [
