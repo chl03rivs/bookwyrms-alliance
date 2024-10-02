@@ -16,7 +16,6 @@ import dj_database_url
 if os.path.isfile('env.py'):
     import env
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
@@ -30,8 +29,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'https://bookwyrms-alliance-b4deb11202b4.herokuapp.com/',
-    'https://8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net'
+    'bookwyrms-alliance-b4deb11202b4.herokuapp.com/',
+    '*.herokuapp.com/'
+    '8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net'
     ]
 
 # Trusted origins for requests
@@ -150,8 +150,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR / "static")]  # Global static folder
-STATIC_ROOT = os.path.join(BASE_DIR / 'staticfiles')  # Where static files will be collected in production
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]  # Global static folder
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Where static files will be collected in production
 
 # Media files (For user-uploaded files)
 MEDIA_URL = '/media/'
