@@ -3,9 +3,78 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.views import generic
 from .models import Post, Comment
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
 
 # CRUD views for posts and comments
+# Creating posts and comments
+def post_create(request):
+    """
+    View for creating new posts:
+        * form submission handling
+        * uses Django's `messages` framework to provide success/error feedback to user
+        * redirects back to the post detail view 
+        
+        (To be added later: * flags the newly created post for review by the admins)
+
+    Uses template: `data/post_create.html`
+    """
+    if request.method == "POST":
+        post_form = PostForm(request.POST)
+
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
+            post.user = request.user  # Set the current user as the post's author
+            post.save()
+            messages.success(request, "Post created successfully!")
+            return HttpResponseRedirect(reverse('post_detail', args=[post.slug]))
+        else:
+            messages.error(request, "Error creating post. Please try again.")
+    else:
+        post_form = PostForm()
+
+    return render(
+        request,
+        'data/post_create.html',
+        {
+            'post_form': post_form,
+        }
+    )
+def comment_create(request, slug):
+    """
+    View for creating a new comment on a specific post:
+        * form submission handling
+        * uses Django's `messages` framework to provide success/error feedback to user
+        * redirects back to the post detail view 
+        
+        (To be added later: * flags the newly created post for review by the admins)
+
+    Uses template: `data/comment_create.html`
+    """
+    post = get_object_or_404(Post, slug=slug)
+
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.user = request.user  # Set the current user as the comment's author
+            comment.post = post  # Link the comment to the post
+            comment.save()
+            messages.success(request, "Comment added successfully!")
+            return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+        else:
+            messages.error(request, "Error adding comment. Please try again.")
+    else:
+        comment_form = CommentForm()
+
+    return render(
+        request,
+        'data/comment_create.html',
+        {
+            'comment_form': comment_form,
+            'post': post,
+        }
+    )
 
 # Reading/viewing content
 class PostListView(generic.ListView):
@@ -52,6 +121,7 @@ def comment_edit(request, slug, comment_id):
         * redirects back to the post detail view 
         
         (To be added later: * flags the updated comment for review by the admins)
+    Uses template: `data/comment_edit.html`
     """
     post = get_object_or_404(Post, slug=slug)
     comment = get_object_or_404(Comment, pk=comment_id)
@@ -79,7 +149,11 @@ def comment_edit(request, slug, comment_id):
     return render(
         request,
         'data/comment_edit.html',
-        {'comment_form': comment_form, 'post': post, 'comment': comment}
+        {
+            'comment_form': comment_form,
+            'post': post,
+            'comment': comment,
+        }
     )
 
 def post_edit(request, slug):
@@ -92,6 +166,7 @@ def post_edit(request, slug):
         * redirects back to the post detail view 
         
         (To be added later: * flags the updated post for review by the admins)
+    Uses template: `data/post_edit.html`
     """
     post = get_object_or_404(Post, slug=slug)
 
@@ -117,5 +192,8 @@ def post_edit(request, slug):
     return render(
         request,
         'data/post_edit.html',
-        {'post_form': post_form, 'post': post,}
+        {
+            'post_form': post_form, 
+            'post': post,
+        }
     )
