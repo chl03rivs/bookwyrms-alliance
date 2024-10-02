@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import UserProfile
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 class Categories(models.Model):
@@ -11,6 +12,7 @@ class Categories(models.Model):
         
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to the user's profile
+    featured_image = CloudinaryField('image', default='placeholder')
     post_title = models.CharField(max_length=255)
     # Commented out for now, until Google Books API is connected 
     # book = models.ForeignKey(Book)
