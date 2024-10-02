@@ -26,11 +26,11 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'bookwyrms-alliance-b4deb11202b4.herokuapp.com/',
-    '*.herokuapp.com/'
+    '.herokuapp.com/',
     '8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net'
     ]
 
