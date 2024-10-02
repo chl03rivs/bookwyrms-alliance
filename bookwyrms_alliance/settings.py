@@ -29,7 +29,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.herokuapp.com', '8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net']
+ALLOWED_HOSTS = [
+    'https://bookwyrms-alliance-b4deb11202b4.herokuapp.com/',
+    'https://8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net'
+    ]
 
 # Trusted origins for requests
 CSRF_TRUSTED_ORIGINS = [
@@ -108,11 +111,6 @@ WSGI_APPLICATION = 'bookwyrms_alliance.wsgi.application'
 DATABASES = {
     'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
-
-CSRF_TRUSTED_ORIGINS = [
-    'https://*.herokuapp.com',
-    'https://8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net',
-]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
