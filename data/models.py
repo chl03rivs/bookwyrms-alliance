@@ -3,7 +3,7 @@ from users.models import UserProfile
 from django.contrib.auth.models import User
 
 # Create your models here.
-class Category(models.Model):
+class Categories(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
@@ -16,7 +16,7 @@ class Post(models.Model):
     # book = models.ForeignKey(Book)
     slug = models.SlugField(max_length=200, unique=True)
     body = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)  # Link to Category model
+    category = models.ForeignKey(Categories, on_delete=models.SET_NULL, null=True)  # Link to Categories model
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
