@@ -30,7 +30,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to the user's profile
-    post = models.ForeignKey(Post, on_delete=models.CASCADE) # Link to the post where the comment is made
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments') # Link to the post where the comment is made
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 

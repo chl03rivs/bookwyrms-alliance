@@ -22,8 +22,17 @@ def post_detail(request, slug):
     queryset = Post.objects.filter(status=1)
     post = get_object_or_404(queryset, slug=slug)
 
+    # Use related_name to get comments
+    comments = post.comments.all().order_by("-created_at")  # Comments ordered by newest first
+    comment_count = post.comments.count()  # Total number of comments
+
+
     return render(
         request,
         "data/post_detail.html",
-        {"post": post},
+        {
+            "post": post,
+            "comments": comments,
+            "comment_count": comment_count,
+        },
     )
