@@ -197,3 +197,47 @@ def post_edit(request, slug):
             'post': post,
         }
     )
+# Deleting content
+def delete_post(request, post_id):
+    """
+    View for post deletion:
+        * Only the post's author or an admin can delete it
+        * uses Django's `messages` framework to provide success/error feedback to user
+        * Renders confirmation page if accessed through a GET request
+        * Redirects to the list of posts after deletion
+    """
+    post = get_object_or_404(Post, id=post_id)
+
+    # Only allow deletion if the current user is the author or a superuser
+    if post.user != request.user and not request.user.is_superuser:
+        messages.error(request, "You are not authorized to delete this post.")
+        return redirect('post_detail', slug=post.slug)
+    
+    if request.method == "POST":
+        post.delete()
+        messages.success(request, 'Post deleted successfully!')
+        return redirect('post_list')
+
+    return render(request, 'data/confirm_delete.html', {'post': post})
+
+def delete_comment(request, post_id, comment_id):
+    """
+    View for comment deletion:
+        * Only the comment's author or an admin can delete the comment
+        * uses Django's `messages` framework to provide success/error feedback to user
+        * Renders confirmation page if accessed through a GET request
+    """
+    post = get_object_or_404(Post, id=post_id)
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    # Only the author of the comment or an admin can delete it
+    if comment.user != request.user and not request.user.is_superuser:
+        messages.error(request, "You are not authorized to delete this comment.")
+        return redirect('post_detail', slug=post.slug)
+
+    if request.method == "POST":
+        comment.delete()
+        messages.success(request, "Comment deleted successfully!")
+        return redirect('post_detail', slug=post.slug)
+
+    return render(request, 'data/confirm_delete.html', {'comment': comment, 'post': post})
