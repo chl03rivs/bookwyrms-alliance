@@ -7,6 +7,7 @@ from .forms import CommentForm
 
 # CRUD views for posts and comments
 
+# Reading/viewing content
 class PostListView(generic.ListView):
     """
     List view of the community posts
@@ -40,6 +41,7 @@ def post_detail(request, slug):
         },
     )
 
+# Updating content
 def comment_edit(request, slug, comment_id):
     """
     View for comment updates:
@@ -48,6 +50,7 @@ def comment_edit(request, slug, comment_id):
         * pre-populating the form with current comment's data
         * uses Django's `messages` framework to provide success/error feedback to user
         * redirects back to the post detail view 
+        
         (To be added later: * flags the updated comment for review by the admins)
     """
     post = get_object_or_404(Post, slug=slug)
@@ -77,4 +80,42 @@ def comment_edit(request, slug, comment_id):
         request,
         'data/comment_edit.html',
         {'comment_form': comment_form, 'post': post, 'comment': comment}
+    )
+
+def post_edit(request, slug):
+    """
+    View for post updates:
+        * author validation
+        * form submission handling
+        * pre-populating the form with current post's data
+        * uses Django's `messages` framework to provide success/error feedback to user
+        * redirects back to the post detail view 
+        
+        (To be added later: * flags the updated post for review by the admins)
+    """
+    post = get_object_or_404(Post, slug=slug)
+
+    # Only the author of the post can edit it
+    if post.user != request.user:
+        messages.error(request, "You are not authorized to edit this post.")
+        return redirect('post_detail', slug=slug)
+
+    if request.method == "POST":
+        post_form = PostForm(request.POST, instance=post)
+
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
+            post.save()
+
+            messages.success(request, "Post updated successfully!")
+            return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+        else:
+            messages.error(request, "Error updating post. Please try again.")
+    else:
+        post_form = PostForm(instance=post)
+
+    return render(
+        request,
+        'data/post_edit.html',
+        {'post_form': post_form, 'post': post,}
     )
