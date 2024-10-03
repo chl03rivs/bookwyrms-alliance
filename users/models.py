@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -7,7 +8,7 @@ class UserProfile(models.Model):
     bio = models.TextField(blank=True)
     location = models.CharField(max_length=50, blank=True)
     website = models.URLField(blank=True)
-    profile_picture = models.ImageField(blank=True, upload_to='media/profile_pics')
+    profile_picture = CloudinaryField('image', default='profile_placeholder')
 
     def __str__(self):
         return self.user.username

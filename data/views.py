@@ -2,11 +2,14 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.views import generic
+from django.contrib.auth.decorators import login_required
+
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
 
 # CRUD views for posts and comments
 # Creating posts and comments
+@login_required
 def post_create(request):
     """
     View for creating new posts:
@@ -39,6 +42,8 @@ def post_create(request):
             'post_form': post_form,
         }
     )
+
+@login_required
 def comment_create(request, slug):
     """
     View for creating a new comment on a specific post:
@@ -111,6 +116,7 @@ def post_detail(request, slug):
     )
 
 # Updating content
+@login_required
 def comment_edit(request, slug, comment_id):
     """
     View for comment updates:
@@ -156,6 +162,7 @@ def comment_edit(request, slug, comment_id):
         }
     )
 
+@login_required
 def post_edit(request, slug):
     """
     View for post updates:
@@ -198,6 +205,7 @@ def post_edit(request, slug):
         }
     )
 # Deleting content
+@login_required
 def delete_post(request, post_id):
     """
     View for post deletion:
@@ -220,6 +228,7 @@ def delete_post(request, post_id):
 
     return render(request, 'data/confirm_delete.html', {'post': post})
 
+@login_required
 def delete_comment(request, post_id, comment_id):
     """
     View for comment deletion:
