@@ -30,8 +30,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'bookwyrms-alliance-b4deb11202b4.herokuapp.com/',
-    '.herokuapp.com/',
-    '8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net'
+    '8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net',
+    'bookwyrms-alliance-b4deb11202b4.herokuapp.com',
     ]
 
 # Trusted origins for requests
@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
     'crispy_forms',
     'crispy_bootstrap5',
     'django_summernote',
@@ -60,10 +59,6 @@ INSTALLED_APPS = [
     'data',
     'users',
 ]
-
-SITE_ID = 1
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
@@ -96,6 +91,36 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# User account settings
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False # To avoid interrupting the user  
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400 # 1 day in seconds
+
+# Mailing settings
+MAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+
+# AllAuth Pre-fix
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "BookWyrms Alliance - "
 
 WSGI_APPLICATION = 'bookwyrms_alliance.wsgi.application'
 
