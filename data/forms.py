@@ -1,5 +1,7 @@
-from .models import Comment, Post
+# Imports
 from django import forms
+
+from .models import Comment, Post
 
 # Inherited from built-in Django classes
 class CommentForm(forms.ModelForm):

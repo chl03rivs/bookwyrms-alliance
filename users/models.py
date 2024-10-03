@@ -1,8 +1,9 @@
+# Imports
 from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 
-# Create your models here.
+# User profile
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Link to Django's User model
     bio = models.TextField(blank=True)

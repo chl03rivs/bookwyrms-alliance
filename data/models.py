@@ -1,9 +1,11 @@
+# Imports
 from django.db import models
-from users.models import UserProfile
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 
-# Create your models here.
+from users.models import UserProfile
+
+# Posts
 class Categories(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
@@ -14,11 +16,13 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to the user's profile
     featured_image = CloudinaryField('image', default='placeholder')
     post_title = models.CharField(max_length=255)
+
     # Commented out for now, until Google Books API is connected 
     # book = models.ForeignKey(Book)
+    
     slug = models.SlugField(max_length=200, unique=True)
     body = models.TextField()
-    category = models.ForeignKey(Categories, on_delete=models.SET_NULL, null=True)  # Link to Categories model
+    category = models.ForeignKey(Categories, on_delete=models.SET_NULL, null=True)  # Link to `Categories` model
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -30,6 +34,7 @@ class Post(models.Model):
             self.slug = slugify(self.post_title)
         super(Post, self).save(*args, **kwargs)
 
+# Comments
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to the user's profile
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments') # Link to the post where the comment is made

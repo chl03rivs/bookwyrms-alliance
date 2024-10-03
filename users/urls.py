@@ -1,3 +1,7 @@
+'''
+URL configuration for the `users` app
+'''
+# Imports
 from django.urls import path, include
 from . import views
 

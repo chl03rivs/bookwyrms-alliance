@@ -1,3 +1,4 @@
+# Imports
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
@@ -11,11 +12,12 @@ from data.models import Post, Comment
 
 # User profile
 def profile_detail(request, user_id):
-    '''
+    """
     View for individual user profile
     Uses template: `users/templates/account/profile_detail.html`
-    '''
+    """
     user_profile = get_object_or_404(UserProfile, user__id=user_id)
+    
     # Fetch recent activity
     recent_posts = Post.objects.filter(user=user_profile.user).order_by('-created_on')[:5]
     recent_comments = Comment.objects.filter(user=user_profile.user).order_by('-created_on')[:5]
@@ -30,7 +32,7 @@ def profile_detail(request, user_id):
 
 @login_required
 def edit(request, user_id):
-    '''
+    """
     View for profile updates:
         * user validation
         * form submission handling
@@ -40,7 +42,7 @@ def edit(request, user_id):
         (To be added later: * flags the updated profile for review by the admins)
 
     Uses template: `users/templates/account/profile_edit.html`
-    '''
+    """
     user_profile = get_object_or_404(UserProfile, user_id=user_id)
 
     # Only the owner of the profile can edit it
