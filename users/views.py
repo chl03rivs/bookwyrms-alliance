@@ -31,7 +31,7 @@ def profile_detail(request, user_id):
     return render(request, 'account/profile_detail.html', context)
 
 @login_required
-def edit(request, user_id):
+def profile_edit(request, user_id):
     """
     View for profile updates:
         * user validation
