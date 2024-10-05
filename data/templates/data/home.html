@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %} <!-- for crispy forms styling -->
+
+{% block content %}
+    <div class="container text-center">
+        <img src="{% static 'images/logo-transparent-bckgd.png' %}" alt="Logo of BookWyrms Alliance: two worms coming out of the screen of a desktop computer" class="img-fluid">
+                        
+        <h2>Welcome to the World Wide Worm!</h2>
+        <p>Finding friends in your 20s is tough; especially when you are wrapped up in your cosy blanket at home, reading book after book...</p>
+        <p>BookWyrms Alliance is THE community for book lovers to connect over their shared passions </p>
+    </div>
+
+    <div class="container text-center">
+        <h2>Join Our Community!</h2>
+        <div class="row align-items-center">
+            <p class="col">If you want to participate in a discussion about your favourite book, give your opinion on an overrated author or share your recipe for the perfect bookworm cookies.</p>
+            <!-- Register Button -->
+            <button type="button" class="col btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
+                Register <i class="fa-solid fa-worm"></i>
+            </button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="registerModalLabel">Register <i class="fa-solid fa-worm"></i></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Recent posts from our users</h2>
+        <p>Or head over to the <a class="link" href="{% url 'post_list' %}"><i class="fa-solid fa-mug-hot"></i>Community page</a> to see all the posts!</p>
+
+        <div class="table-responsive"></div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Title</th>
+                        <th>Username</th>
+                        <th>Date Posted</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in recent_posts %}
+                    <tr>
+                        <td>{{ post.category }}</td>
+                        <td>{{ post.post_title }}</td>
+                        <td>{{ post.user }}</td>
+                        <td>{{ post.created_at|date:"M d, Y" }}</td>
+                        <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-primary">View</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No recent posts available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock content %}

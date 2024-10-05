@@ -18,10 +18,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from data import views as data_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('summernote/', include('django_summernote.urls')),
     path('accounts/', include('allauth.urls')),
     path('users/', include('users.urls')),
-    path('', include('data.urls'), name='data-urls'),
+    path('', data_views.home_view, name='home'),
+    path('community/', include('data.urls')),
 ]

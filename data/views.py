@@ -1,12 +1,39 @@
 # Imports
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.views import generic
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from allauth.account.forms import SignupForm
 
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
+
+# Home page
+def home_view(request):
+    # Retrieve the 7 most recent posts
+    recent_posts = Post.objects.order_by('-created_at')[:7]
+    
+    context = {
+        'recent_posts': recent_posts,
+    }
+
+    # Link sign up form
+    if request.method == "POST":
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save(request)
+            login(request, user)  # Automatically log in the user after registration
+            return redirect('post_list')  # Redirect to the community after registration
+    else:
+        form = SignupForm()
+
+    # Add the form to the context
+    context['form'] = form
+
+    return render(request, 'data/home.html', context)
+
 
 # CRUD views for posts and comments
 # Creating posts and comments
@@ -99,8 +126,7 @@ def post_detail(request, slug):
         * a comment count
     Uses template: data/post_detail.html
     """
-    queryset = Post.objects.filter(status=1)
-    post = get_object_or_404(queryset, slug=slug)
+    post = get_object_or_404(Post, slug=slug)
 
     # Use related_name to get comments
     comments = post.comments.all().order_by("-created_at")  # Comments ordered by newest first
