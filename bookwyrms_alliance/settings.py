@@ -29,13 +29,15 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'bookwyrms-alliance-b4deb11202b4.herokuapp.com/',
-    '8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net',
-    'localhost',
+    "bookwyrms-alliance-b4deb11202b4.herokuapp.com",
+    "8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net",
+    "127.0.0.1",
+    "localhost",
     ]
 
 # Trusted origins for requests
 CSRF_TRUSTED_ORIGINS = [
+    "https://8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net",
     "https://*.codeinstitute-ide.net/",
     "https://*.herokuapp.com"
 ]
@@ -159,12 +161,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Tells Whitenoise to compress and cache static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files (For user-uploaded & placeholder files)
+CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL")
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # Default primary key field type
