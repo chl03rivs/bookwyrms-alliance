@@ -32,11 +32,11 @@ def home_view(request):
     # Add the form to the context
     context['form'] = form
 
-    return render(request, 'data/home.html', context)
+    return render(request, 'pages/home.html', context)
 
 # Help page
 def help_view(request):
-    return render(request, 'data/help.html')
+    return render(request, 'pages/help.html')
 
 
 # CRUD views for posts and comments
