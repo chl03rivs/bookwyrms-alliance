@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %} <!-- for crispy forms styling -->
+
+{% block content %}
+    <div class="container text-center">
+        <h2>Help</h2>
+        
+        <!--Quick Navigation -->
+        <nav>
+            <ul>
+                <li><a href="#about"><i class="fa-solid fa-worm"></i> About BookWyrms Alliance</a></li>
+                <li><a href="#faq"><i class="fa-regular fa-circle-question"></i> Frequently Asked Question</a></li>
+                <li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2><i class="fa-solid fa-worm"></i> About Us</h2>
+        <p>Finding friends in your twenties is tough and that is where BookWyrm's Alliance comes in!</p>
+
+        <p>This is a forum for bookworms, aiming to be a sort of "third-place" to meet and interact with like-minded people.</p>
+        
+        <p>We are planning to add more features in the future, but for now, we've got your basics covered:</p>
+
+        <ul>
+            <li>View posts and comments (no account required)</li>
+            <li>Write your own posts and comments (account required)</li>
+            <li>Personalise your profile to help users get to know you</li>
+            <li>Report any content or user that is creating a hostile environment</li>
+        </ul>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq">
+        <h2><i class="fa-regular fa-circle-question"></i> Frequently Asked Questions</h2>
+        <p>Here you can list common questions and answers.</p>
+    
+        <details>
+            <summary>How do I create an account?</summary>
+            <p>To create an account, click on the <i class="fa-solid fa-book"></i> book icon at the top right of the page and select "Register"</p>
+            
+            <p>You will need to fill in a brief form with your details. Once registered, you can log in <i class="fa-solid fa-book-open-reader"></i> and join the community discussions!</p>
+        </details>
+    
+        <details>
+            <summary>Is the website free to use?</summary>
+            <p>Yes, BookWyrms Alliance is completely free to use. You can access all features like creating posts, commenting, and participating in discussions without any cost.</p>
+
+            <p>Please note that we do require the creation of an account in order to publish posts or comments. This is to help our moderation efforts and is also completely free.</p>
+        </details>
+    
+        <details>
+            <summary>How do I reset my password?</summary>
+            <p>If you’ve forgotten your password, click on the "Forgot Password" link on the login page. You’ll receive an email with instructions on how to reset your password.</p>
+        </details>
+    
+        <details>
+            <summary>How can I post in the Community?</summary>
+            <p>Once you're logged in, go to the  <a href="{% url 'post_list' %}"><i class="fa-solid fa-mug-hot"></i> Community page</a> and click on "New Post" <i class="fa-solid fa-pen-nib"></i>.</p>
+            
+            <p>Fill in the post details and click "Submit" <i class="fa-solid fa-paper-plane"></i> to share it with others!</p>
+        </details>
+    
+        <details>
+            <summary>What should I do if I encounter inappropriate content?</summary>
+            <p>If you see inappropriate content/behaviour, please report it by clicking the "Report" button. It looks like:</p>
+            <ul>
+                <li>A flag <i class="fa-regular fa-flag"></i>, located right below the post or comment </li>
+                <li>A <i class="fa-solid fa-ban"></i> on the user's profile</li>
+            </ul>
+            <p>Our team will review the report and take action if necessary.</p>
+        </details>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2><i class="fa-solid fa-envelope"></i> Contact Us</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">Your Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Your Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit <i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+    </section>
+
+{% endblock content %}

@@ -26,5 +26,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('users/', include('users.urls')),
     path('', data_views.home_view, name='home'),
+    path('help/', data_views.help_view, name='help'),
     path('community/', include('data.urls')),
 ]

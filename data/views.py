@@ -34,6 +34,10 @@ def home_view(request):
 
     return render(request, 'data/home.html', context)
 
+# Help page
+def help_view(request):
+    return render(request, 'data/help.html')
+
 
 # CRUD views for posts and comments
 # Creating posts and comments
