@@ -31,7 +31,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'bookwyrms-alliance-b4deb11202b4.herokuapp.com/',
     '8000-chl03rivs-bookwyrmsalli-68xs6hsa7zq.ws.codeinstitute-ide.net',
-    'bookwyrms-alliance-b4deb11202b4.herokuapp.com',
+    'localhost',
     ]
 
 # Trusted origins for requests
@@ -65,6 +65,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -158,8 +159,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]  # Global static folder
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Where static files will be collected in production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Tells Whitenoise to compress and cache static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files (For user-uploaded & placeholder files)
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
