@@ -1,55 +1,17 @@
 {% extends "base.html" %}
-{% load i18n %}
-{% load allauth account %}
-
-{% block head_title %}
-    {% trans "Sign In" %}
-{% endblock head_title %}
 
 {% block content %}
-    <h1>{% trans "Sign In" %}</h1>
+    <h2>Sign In</h2>
+   
+    <p>
+        If you have not created an account yet, then please <a href="{{ signup_url }}"><i class="fa-solid fa-worm"></i> sign up for one here</a> first.
+    </p>
+    {% url 'account_login' as login_url %}
     
-    {% if not SOCIALACCOUNT_ONLY %}
-        <p>
-            {% blocktranslate %}If you have not created an account yet, then please <a href="{{ signup_url }}">sign up</a> first.{% endblocktranslate %}
-        </p>
-
-        {% url 'account_login' as login_url %}
-        
-        <form method="post" action="{{ login_url }}">
-            {% csrf_token %}
-            {{ redirect_field }} <!-- Include the hidden redirect field -->
-            {% element fields form=form unlabeled=True %} <!-- You may want to keep this if it works correctly -->
-            <button type="submit">
-                {% trans "Sign In" %}
-            </button>
-        </form>
-    {% endif %}
-
-    {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
-        <hr>
-        <div class="button-group" style="display: flex; flex-direction: column;">
-            {% if PASSKEY_LOGIN_ENABLED %}
-                <button type="submit" form="mfa_login" id="passkey_login" class="btn btn-outline-primary">
-                    {% trans "Sign in with a passkey" %}
-                </button>
-            {% endif %}
-            {% if LOGIN_BY_CODE_ENABLED %}
-                <a href="{{ request_login_code_url }}" class="btn btn-outline-primary">
-                    {% trans "Mail me a sign-in code" %}
-                </a>
-            {% endif %}
-        </div>
-    {% endif %}
-
-    {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-    {% endif %}
-{% endblock content %}
-
-{% block extra_body %}
-    {{ block.super }}
-    {% if PASSKEY_LOGIN_ENABLED %}
-        {% include "mfa/webauthn/snippets/login_script.html" with button_id="passkey_login" %}
-    {% endif %}
+    <form method="post" action="{{ login_url }}">
+        {% csrf_token %}
+        {{ redirect_field }}
+        {% element fields form=form unlabeled=True %}
+        <button type="submit">Sign In <i class="fa-solid fa-book-open-reader"></i></button>
+    </form>
 {% endblock %}
