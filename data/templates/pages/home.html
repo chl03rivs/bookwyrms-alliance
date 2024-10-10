@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load crispy_forms_tags %} <!-- for crispy forms styling -->
+{% load crispy_forms_tags %}
 
 {% block content %}
     <div class="container text-center">
@@ -61,7 +61,7 @@
                         <td>{{ post.category }}</td>
                         <td>{{ post.post_title }}</td>
                         <td>{{ post.user }}</td>
-                        <td>{{ post.created_at|date:"M d, Y" }}</td>
+                        <td>{{ post.created_at | date:"M d, Y" }}</td>
                         <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-primary">View</a></td>
                     </tr>
                     {% empty %}

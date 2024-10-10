@@ -55,6 +55,11 @@ def profile_edit(request, user_id):
         profile_form = ProfileForm(request.POST, request.FILES, instance=user_profile)
 
         if profile_form.is_valid():
+        
+            if form.cleaned_data['gallery_picture']: # If the user selected a gallery picture
+                profile.profile_picture = None  # Remove the uploaded file if gallery image is chosen
+              # Check if a gallery picture is selected
+              
             profile_form.save()
             messages.success(request, "Profile updated successfully!")
 
