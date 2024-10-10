@@ -1,0 +1,52 @@
+/*General styles*/
+/*Headings*/
+h1 {
+    font-size: calc(21px + 1.5vw) !important;
+    text-align: center;
+    white-space: break-spaces;
+}
+h1, h2, h3 {
+    font-family: "Monofett", monospace;
+    font-style: normal;
+    color: #99cccc !important;
+  }
+
+* {
+    font-family: "Space Mono", monospace;
+    font-weight: 400;
+    font-style: normal;
+    color: #ffcc00;
+    background-color: #282f52;
+}
+/*Colors*/
+.yellow-accent {
+    color: #ffcc00 !important;
+}
+/*Icons*/
+#navbarUserNav i {
+    background-color: #ffcc00;
+    color: #282f52;
+    padding: 6px;
+    border-radius: 22%;
+}
+.fa-solid {
+    background-color: rgba(255, 255, 255, 0);
+    color: #ffcc00;
+}
+/*Buttons*/
+.purple-button {
+    background-color: #884ace !important;
+}
+/*Links*/
+.active {
+    color: #884ace !important;
+}
+/*HEADER*/
+header {
+    border-bottom: 1px solid #ffcc00;
+}
+
+/*Navigation*/
+.navbar-nav .dropdown-menu {
+    position: absolute !important;
+}
