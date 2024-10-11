@@ -18,9 +18,9 @@
             {{ profile_form | crispy }}
         </div>
 
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn btn-basic">Save changes</button>
         <!-- Cancel button that redirects to the profile detail page -->
-        <a href="{% url 'profile_detail' user.id %}" class="btn btn-secondary">Cancel</a>
+        <a href="{% url 'profile_detail' user.id %}" class="btn btn-warning">Cancel</a>
     </form>
 
 {% endblock content %}

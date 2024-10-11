@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+
     <div class="container text-center">
         <img src="{% static 'images/logo-transparent-bckgd.png' %}" alt="Logo of BookWyrms Alliance: two worms coming out of the screen of a desktop computer" class="img-fluid">
                         
@@ -10,13 +11,13 @@
         <p>Finding friends in your 20s is tough; especially when you are wrapped up in your cosy blanket at home, reading book after book...</p>
         <p>BookWyrms Alliance is THE community for book lovers to connect over their shared passions </p>
     </div>
-
+    
     <div class="container text-center">
         <h2>Join Our Community!</h2>
         <div class="row align-items-center">
             <p class="col">If you want to participate in a discussion about your favourite book, give your opinion on an overrated author or share your recipe for the perfect bookworm cookies.</p>
             <!-- Register Button -->
-            <button type="button" class="col btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
+            <button type="button" class="col btn btn-basic" data-bs-toggle="modal" data-bs-target="#registerModal">
                 Register <i class="fa-solid fa-worm"></i>
             </button>
         </div>
@@ -33,7 +34,7 @@
                         <form method="post" novalidate>
                             {% csrf_token %}
                             {{ form|crispy }}
-                            <button type="submit" class="btn btn-primary">Register <i class="fa-solid fa-worm"></i></button>
+                            <button type="submit" class="btn loader-button">Register <i class="fa-solid fa-worm"></i></button>
                         </form>
                     </div>
                 </div>
@@ -46,7 +47,7 @@
         <p>Or head over to the <a class="link" href="{% url 'post_list' %}"><i class="fa-solid fa-mug-hot"></i> Community page</a> to see all the posts!</p>
 
         <div class="table-responsive"></div>
-            <table class="table align-middle table-striped table-success">
+            <table class="table align-middle table-striped">
                 <thead>
                     <tr>
                         <th>Category</th>
@@ -63,7 +64,7 @@
                         <td>{{ post.post_title }}</td>
                         <td>{{ post.user }}</td>
                         <td>{{ post.created_at | date:"M d, Y" }}</td>
-                        <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-primary">View</a></td>
+                        <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-basic">View</a></td>
                     </tr>
                     {% empty %}
                     <tr>

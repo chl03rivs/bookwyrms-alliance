@@ -3,6 +3,7 @@
     font-family: "Space Mono", monospace;
     font-weight: 400;
     font-style: normal;
+    font-size: 1.16rem;
     color: #ffc600;
     background-color: #201d3f;
 }
@@ -32,18 +33,7 @@ h1, h2, h3 {
     color: #ffc600;
 }
 /*Buttons*/
-.btn-basic {
-    color: #ffc600;
-    background: #ffffff00;
-    border-color: #ffc600;
-}    
-.btn-basic:hover {
-    border-color: #81FB60;
-}
-.btn-basic:focus {
-    border-color: #ffc600;
-    background-color: #81fb6075;
-}
+
 /*Retro button styles*/
 /*Inspired by thttps://codepen.io/b1tn3r/pen/YjOzRv*/
 .loader-button {
@@ -162,14 +152,8 @@ header {
     background-color: #ffc600;
 }
 .dropdown-item {
-    color: #ffc600 ;
+    color: #ffc600  ;
     background-color: #201d3f;
-}
-.navbar-toggler {
-    border-color: #ffc600;
-}
-.navbar-toggler:focus, .dropdown-toggle::after {
-    color: #87d8d8;
 }
 /*Forms*/
 .form-control {

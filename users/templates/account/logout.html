@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
     <h2>Sign Out</h2>
@@ -12,6 +14,6 @@
         {% csrf_token %}
         {{ redirect_field }}
 
-        <button type="submit">Sign Out <i class="fa-solid fa-book"></i></button>
+        <button type="submit loader-button">Sign Out <i class="fa-solid fa-book"></i></button>
     </form>
 {% endblock content %}

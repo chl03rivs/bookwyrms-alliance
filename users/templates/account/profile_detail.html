@@ -24,7 +24,7 @@
                 <p><strong>Last Name:</strong> {{ profile.user.last_name }}</p>
                 <p><strong>Email:</strong> {{ profile.user.email }}</p>
 
-                <a href="{% url 'update_profile' %}" class="btn btn-primary">Edit Profile</a>
+                <a href="{% url 'update_profile' %}" class="btn btn-basic">Edit Profile</a>
             {% endif}
 
             <h4>About {{ request.user.username }}</h4>
