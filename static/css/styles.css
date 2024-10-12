@@ -176,3 +176,15 @@ header {
     width: 60%;
     border-radius: 2px;
 }
+/*DATA*/
+/*Comments*/
+.comment-pic {
+    border-radius: 50%;
+    width: 40px;
+}
+.comment-form textarea {
+    width: 100%;
+}
+.comment-user {
+    padding: 6px;
+}
