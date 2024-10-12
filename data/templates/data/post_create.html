@@ -1,1 +1,29 @@
-Placeholder
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h2><i class="fa-solid fa-pen-nib"></i> New post</h2>
+    <form method="POST" action="{% url 'new_post' post.id %}">
+                    {% csrf_token %}
+                    <textarea name="comment" placeholder="Add a comment..." required></textarea>
+                    <button type="submit" class="btn">Submit Comment</button>
+                </form>
+            </div>
+            {% else %}
+                <div class="comment-user">
+                    <!-- Placeholder image for non-authenticated users -->
+                    <img src="{% static 'images/profile_gallery/placeholder_profile_picture.webp' %}" alt="Guest" class="comment-pic">
+                </div>
+                <div class="comment-form">
+                    <form>
+                        <textarea name="comment" placeholder="Sign in to add a comment..." disabled></textarea>
+                        <button type="submit" class="btn" disabled>Publish Post <i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                    <a href="{% url 'account_login' %}" class="btn btn-sign-in">Sign In</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

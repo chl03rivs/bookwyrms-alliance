@@ -3,40 +3,38 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2><i class="fa-solid fa-address-card"></i> {{ request.user.username }}'s Profile</h2>
-    <div class="row">
-        <!-- Profile Picture -->
-        <div class="col-md-4">
-            {% if profile.profile_picture %}
-                <img src="{{ profile.get_profile_image }}" class="img-fluid rounded" alt="{{ request.user.username }}'s profile picture">
-            {% else %}
-                <img src="{% static 'images/default_profile_picture.jpg' %}" class="img-fluid rounded" alt="Default profile picture">
-            {% endif %}
-        </div>
-        
-        <!-- User Information -->
-        <div class="col-md-8">
-            <!-- Show User Information Only to Profile Owner -->
-            {% if request.user == profile.user %}
-                <h4><i class="fa-solid fa-eye-low-vision"></i> User Information (Private)</h4>
-                <br>
-                <p><strong>Username:</strong> {{ profile.user.username }}</p>
-                <p><strong>First Name:</strong> {{ profile.user.first_name }}</p>
-                <p><strong>Last Name:</strong> {{ profile.user.last_name }}</p>
-                <p><strong>Email:</strong> {{ profile.user.email }}</p>
+    <div class="container mt-5">
+        <h2><i class="fa-solid fa-address-card"></i> {{ profile.user.username }}'s Profile</h2>
+        <div class="row">
+            <!-- Profile Picture -->
+            <div class="col-md-4">
+                <img src="{{ profile.user_picture }}" class="img-fluid" alt="{{ profile.user.username }}'s profile picture">
+            </div>
 
-                <a href="{% url 'update_profile' %}" class="btn btn-basic">Edit Profile</a>
-            {% endif}
+            <!-- User Information -->
+            <div class="col-md-8">
+                <!-- Show User Information Only to Profile Owner -->
+                {% if request.user == profile.user %}
+                    <h4><i class="fa-solid fa-eye-low-vision"></i> User Information (Private)</h4>
+                    <br>
+                    <p><strong>Username:</strong> {{ profile.user.username }}</p>
+                    <p><strong>First Name:</strong> {{ profile.user.first_name }}</p>
+                    <p><strong>Last Name:</strong> {{ profile.user.last_name }}</p>
+                    <p><strong>Email:</strong> {{ profile.user.email }}</p>
 
-            <h4>About {{ request.user.username }}</h4>
+                    <a href="{% url 'profile_edit' request.user.id %}" class="btn btn-basic">Edit Profile</a>
+                    <br>
+                    <hr>
+                {% endif %}
 
-            <p><strong>Location:</strong> {{ profile.location | default:"No location provided." }}</p>
-            <p><strong>Website:</strong> {{ profile.website | default: "No website provided." }}</p>
+                <h4>About {{ profile.user.username }}</h4>
 
-            <p><strong>Bio:</strong> {{ profile.bio | default:"No bio provided." }}</p>
+                <p><strong>Location:</strong> {{ profile.location|default:"No location provided." }}</p>
+                <p><strong>Website:</strong> {{ profile.website|default:"No website provided." }}</p>
+
+                <p><strong>Bio:</strong> {{ profile.bio|default:"No bio provided." }}</p>
+            </div>
         </div>
     </div>
-</div>
 
-{% endblock content %}
+{% endblock %}

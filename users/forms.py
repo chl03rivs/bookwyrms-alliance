@@ -1,6 +1,8 @@
 # Imports
 from django import forms
-
+from django.contrib.auth.models import User
+from django.templatetags.static import static
+from django.contrib.auth.forms import UserChangeForm
 from .models import UserProfile
 
 # User profile update
@@ -22,7 +24,7 @@ class ProfileForm(forms.ModelForm):
     gallery_picture = forms.ChoiceField(
         choices=gallery_choices, 
         required=False, 
-        label='Choose from Gallery',
+        label='Or choose from our Wyrm Gallery',
         widget=forms.RadioSelect,)
 
     class Meta:

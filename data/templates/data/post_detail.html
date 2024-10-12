@@ -5,26 +5,34 @@
 {% block content %}
     <div class="container-fluid">
         <article class="post-detail">
-            <h1>{{ post.title }}</h1>
+            <h1><i class="fa-regular fa-file-lines justify-content-left"></i> {{ post.post_title }}</h1>
             <p class="post-meta">
                 <span>By {{ post.author }}</span> | 
                 <span>Published on {{ post.published_date|date:"F j, Y" }}</span>
             </p>
 
+            <p>
+                <span>Category: {{ post.category }}</span>
+                <!--<span>Book: {{post.linked_book}}</span>-->
+            </p>
+
             <div class="post-content">
-                {{ post.content|linebreaks }}
+                {{ post.body|linebreaks }}
             </div>
         </article>
-
+        <hr>
         <!-- Comments Section -->
         <div class="container-fluid comments-section">
-            <h2>Comments</h2>
+            <h2><i class="fa-regular fa-comment-dots"></i> Comments</h2>
             {% if post.comments.all %}
-                <ul class="comments-list">
+                <ul>
                     {% for comment in post.comments.all %}
                         <li>
-                            <p class="comment-author"><strong>{{ comment.author }}</strong> said on {{ comment.created_at|date:"F j, Y, g:i a" }}:</p>
-                            <p class="comment">{{ comment.content|linebreaks }}</p>
+                            <img src="{{ profile.get_profile_image }}" class="img-fluid rounded" alt="{{ author.username }}'s profile picture">
+                            <p class="comment-author">
+                                <a href="{% url 'profile_detail' comment.author.id %}" >{{ comment.author }}</a> said on {{ comment.created_at|date:"F j, Y, g:i a" }}:
+                            </p>
+                            <p class="comment">{{ comment.body|linebreaks }}</p>
                         </li>
                     {% endfor %}
                 </ul>
@@ -35,12 +43,11 @@
         <!-- Comment Creation Form -->
         <div class="container-fluid d-flex">
             {% if user.is_authenticated %}
-            <div class="comment-user">
-                <!-- Assuming you have a 'profile_picture' field in your user model or user profile -->
-                <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}" class="profile-picture">
+            <div class="comment-author">
+                <img src="{{ user.userprofile.profile_picture }}" alt="{{ user.username }}" class="profile-picture">
             </div>
             <div class="comment-form">
-                <form method="POST" action="{% url 'add_comment' post.id %}">
+                <form method="POST" action="{% url 'new_comment' post.id %}">
                     {% csrf_token %}
                     <textarea name="comment" placeholder="Add a comment..." required></textarea>
                     <button type="submit" class="btn">Submit Comment</button>
@@ -54,7 +61,7 @@
                 <div class="comment-form">
                     <form>
                         <textarea name="comment" placeholder="Sign in to add a comment..." disabled></textarea>
-                        <button type="submit" class="btn" disabled>Submit Comment</button>
+                        <button type="submit" class="btn" disabled>Post comment <i class="fa-solid fa-paper-plane"></i></button>
                     </form>
                     <a href="{% url 'account_login' %}" class="btn btn-sign-in">Sign In</a>
                 </div>

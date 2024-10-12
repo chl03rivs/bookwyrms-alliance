@@ -19,8 +19,8 @@ def profile_detail(request, user_id):
     user_profile = get_object_or_404(UserProfile, user__id=user_id)
     
     # Fetch recent activity
-    recent_posts = Post.objects.filter(user=user_profile.user).order_by('-created_on')[:5]
-    recent_comments = Comment.objects.filter(user=user_profile.user).order_by('-created_on')[:5]
+    recent_posts = Post.objects.filter(author=user_profile.user).order_by('-created_at')[:5]
+    recent_comments = Comment.objects.filter(author=user_profile.user).order_by('-created_at')[:5]
     
     context = {
         'profile': user_profile,

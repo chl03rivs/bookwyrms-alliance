@@ -58,7 +58,7 @@ def post_create(request):
 
         if post_form.is_valid():
             post = post_form.save(commit=False)
-            post.user = request.user  # Set the current user as the post's author
+            post.author = request.user  # Set the current user as the post's author
             post.save()
             messages.success(request, "Post created successfully!")
             return HttpResponseRedirect(reverse('post_detail', args=[post.slug]))
@@ -94,7 +94,7 @@ def comment_create(request, slug):
 
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
-            comment.user = request.user  # Set the current user as the comment's author
+            comment.authro = request.user  # Set the current user as the comment's author
             comment.post = post  # Link the comment to the post
             comment.save()
             messages.success(request, "Comment added successfully!")
@@ -164,7 +164,7 @@ def comment_edit(request, slug, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
 
     # Only the author of the comment can edit it
-    if comment.user != request.user:
+    if comment.author != request.user:
         messages.error(request, "You are not authorized to edit this comment.")
         return redirect('post_detail', slug=slug)
 
@@ -209,7 +209,7 @@ def post_edit(request, slug):
     post = get_object_or_404(Post, slug=slug)
 
     # Only the author of the post can edit it
-    if post.user != request.user:
+    if post.author != request.user:
         messages.error(request, "You are not authorized to edit this post.")
         return redirect('post_detail', slug=slug)
 
@@ -248,7 +248,7 @@ def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
     # Only allow deletion if the current user is the author or a superuser
-    if post.user != request.user and not request.user.is_superuser:
+    if post.authro != request.user and not request.user.is_superuser:
         messages.error(request, "You are not authorized to delete this post.")
         return redirect('post_detail', slug=post.slug)
     
@@ -271,7 +271,7 @@ def delete_comment(request, post_id, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
 
     # Only the author of the comment or an admin can delete it
-    if comment.user != request.user and not request.user.is_superuser:
+    if comment.author != request.user and not request.user.is_superuser:
         messages.error(request, "You are not authorized to delete this comment.")
         return redirect('post_detail', slug=post.slug)
 

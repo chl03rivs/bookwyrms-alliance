@@ -3,26 +3,56 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <h2>My Profile — Updating...</h2>
+    <h2 class="d-flex justify-content-center">My Profile — Updating...</h2>
 
     <form action="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        
-        <!-- Display User Info Form -->
-        <div class="mb-3">
-            <h4><i class="fa-solid fa-address-card"></i><i class="fa-solid fa-eye-low-vision"></i> User Info (Private)</h4>
-            {{ user_form | crispy }}
-        </div>
 
-        <!-- Display Profile Info Form -->
-        <div class="mb-3">
-            <h4><i class="fa-solid fa-eye"></i> About (Public)</h4>
-            {{ profile_form | crispy }}
+        <h3><i class="fa-solid fa-eye"></i> About (Public)</h3>
+        <p>
+            NOTE: In order to change your user details (e.g., password, username, etc.), please visit <a href="x">the settings page here</a>.
+        </p>
+        <br>
+        <div class="container-fluid row">
+            <div class="col-md-6 mb-3">
+                {{ profile_form.bio.label_tag }} {{ profile_form.bio }}
+                {{ profile_form.location.label_tag }} {{ profile_form.location }}
+                {{ profile_form.website.label_tag }} {{ profile_form.website }}
+                {{ profile_form.profile_picture.label_tag }} {{ profile_form.profile_picture }}
+            
+                <label>Or choose from our Wyrm Gallery:</label>
+                <div id="gallery-images">
+                    {% for value, label in profile_form.gallery_picture.field.choices %}
+                        <label>
+                            <input type="radio" name="gallery_picture" value="{{ value }}" onchange="updateSelectedImage(this)">
+                            <img src="{% static 'images/profile_gallery/'|add:value %}" alt="{{ label }}" style="width: 100px; margin: 5px; border: 2px solid transparent;" class="rounded">
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <h4>Selected Image:</h4>
+                <img id="selectedImage" src="" alt="Selected Thumbnail" style="display: none; max-width: 200px;"/>
+            </div>
         </div>
-
-        <button type="submit" class="btn btn-basic">Save changes</button>
-        <!-- Cancel button that redirects to the profile detail page -->
-        <a href="{% url 'profile_detail' user.id %}" class="btn btn-warning">Cancel</a>
+    
+        <br><hr>
+        <div>
+            <button type="submit" class="btn btn-basic">Save changes</button>
+            <!--Cancel button that redirects to the profile detail page--><a href="{% url 'profile_detail' user.id %}" class="btn btn-warning">Cancel changes</a>
+        </div>
     </form>
+    
+    <script>
+        function updateSelectedImage(radio) {
+            // Adjusts the path based on the static settings
+            // Displays the selected image to assist user's choice
+            const selectedImage = document.getElementById('selectedImage');
+            const selectedSrc = '/static/images/profile_gallery/' + radio.value;
+            selectedImage.src = selectedSrc;
+            selectedImage.style.display = 'block';
+        }
+    </script>
+    
 
 {% endblock content %}
