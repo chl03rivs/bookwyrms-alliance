@@ -27,7 +27,7 @@ h1, h2, h3 {
 .navbar-toggle {
     color: #ffc600;
 }
-#navbarUserNav i {
+#userNav i {
     background-color: #ffc600;
     color: #201d3f;
     padding: 6px;
