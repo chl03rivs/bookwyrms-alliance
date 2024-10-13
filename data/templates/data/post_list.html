@@ -1,1 +1,417 @@
-placeholder
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h2>Browse the World Wide Worm!</h2>
+
+    <div class="container text-center">                        
+        <p>Here you can access all the posts from our community! Have a look through a category or use the search bar to look for posts about a specific book.</p>
+
+        <!--Insert search bar here-->
+    </div>
+
+    {% if user.is_authenticated %}
+        <div class="container-fluid">
+            <p>Something you want to share?</p>
+            <div class="btn btn-basic">
+                <a href="{% url 'new_post' %}">
+                    <i class="fa-solid fa-pen-nib"></i> Write a new a post!
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <!--Registration invitation-->
+        <div class="container-fluid">
+            <h2>Join Our Community!</h2>
+            <div class="row align-items-center">
+                <p class="col"><strong>Note:</strong> If you want to participate in a discussion or write your own posts, you will need to create an account. You can use this button to register.</p>
+                
+                <p>Or, at any time, click on the <strong><i class="fa-solid fa-book"></i> Profile menu</strong></p>
+                <!-- Register Button -->
+                <button type="button" class="col btn btn-basic" data-bs-toggle="modal" data-bs-target="#registerModal">
+                    <i class="fa-solid fa-worm"></i> Register 
+                </button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="registerModalLabel">Register <i class="fa-solid fa-worm"></i></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" novalidate>
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <button type="submit" class="btn loader-button">Register <i class="fa-solid fa-worm"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!--Bootstrap tab view-->
+    <h2 class="text-center mb-4">Posts from our users</h2>
+    <p>See all posts or filter by category</p>
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="nav flex-column nav-pills col-12 col-md-3 align-items-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" data-toggle="pill" href="#all" role="tab" aria-controls="all" aria-selected="true">All posts</a>
+                <a class="nav-link" data-toggle="pill" href="#opinion" role="tab" aria-controls="opinion" aria-selected="false">Opinion</a>
+                <a class="nav-link" data-toggle="pill" href="#rec" role="tab" aria-controls="rec" aria-selected="false">Recommendation</a>
+                <a class="nav-link" data-toggle="pill" href="#discu" role="tab" aria-controls="discu" aria-selected="false">Discussion</a>
+                <a class="nav-link" data-toggle="pill" href="#rant" role="tab" aria-controls="rant" aria-selected="false">Rant</a>
+                <a class="nav-link" data-toggle="pill" href="#tech" role="tab" aria-controls="tech" aria-selected="false">Gadgets & tech</a>
+                <a class="nav-link" data-toggle="pill" href="#hobbies" role="tab" aria-controls="hobbies" aria-selected="false">Hobbies</a>
+                <a class="nav-link" data-toggle="pill" href="#writers" role="tab" aria-controls="writers" aria-selected="false">Writers</a>
+                <a class="nav-link" data-toggle="pill" href="#misc" role="tab" aria-controls="misc" aria-selected="false">Miscellaneous</a>
+            </div>
+            
+            <div class="tab-content col-12 col-md-9" id="v-pills-tabContent">
+                <div id="all" class="tab-pane fade show active table-responsive" role="tabpanel" aria-labelledby="v-pills-all-tab">
+                    <h3>All posts</h3>
+                    
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Category</th>
+                                <th scope="col">Title</th>
+                                <th scope="col" class="d-none d-sm-table-cell">Author</th>
+                                <th scope="col">Date Posted</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in posts %}
+                            <tr>
+                                <td scope="row">{{ post.category }}</td>
+                                <td>{{ post.post_title }}</td>
+                                <td class="d-none d-sm-table-cell">{{ post.author }}</td>
+                                <td>{{ post.created_at | date:"M d, Y" }}</td>
+                                <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary">View</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No posts available.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'new_post' %}" class="btn btn-basic">
+                                        <i class="fa-solid fa-pen-nib"></i> Be the first to create a post!
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="opinion" class="tab-pane fade table-responsive" role="tabpanel" aria-labelledby="v-pills-opinion-tab">
+                    <h3>Opinion</h3>
+                    <p>This category regroups all posts where users share their opinions or reviews on books, authors, movie adaptations, etc.</p>
+                     
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col" class="d-none d-sm-table-cell">Author</th>
+                                <th scope="col">Date Posted</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in opinion_posts %}
+                            <tr>
+                                <td scope="row">{{ post.post_title }}</td>
+                                <td class="d-none d-sm-table-cell">{{ post.author }}</td>
+                                <td>{{ post.created_at | date:"M d, Y" }}</td>
+                                <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary">View</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No opinion posts available.</td>
+                            </tr>
+                             
+                            <tr>
+                                <td>
+                                    <a href="{% url 'new_post' %}" class="btn btn-basic">
+                                        <i class="fa-solid fa-pen-nib"></i> Be the first to create a post!
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="rec" class="tab-pane fade table-responsive" role="tabpanel" aria-labelledby="v-pills-rec-tab">
+                    <h3>Recommendation</h3>
+                    <p>This category regroups all posts where users either request or make book recommendations.</p>
+                     
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col" class="d-none d-sm-table-cell">Author</th>
+                                <th scope="col">Date Posted</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in rec_posts %}
+                            <tr>
+                                <td scope="row">{{ post.post_title }}</td>
+                                <td class="d-none d-sm-table-cell">{{ post.author }}</td>
+                                <td>{{ post.created_at | date:"M d, Y" }}</td>
+                                <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary">View</a></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <a href="{% url 'new_post' %}" class="btn btn-basic">i class="fa-solid fa-pen-nib"></i> Be the first to create a post!</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No recommendation posts available.</td>
+                            </tr>
+                             
+                            <tr>
+                                <td>
+                                    <a href="{% url 'new_post' %}" class="btn btn-basic">
+                                        <i class="fa-solid fa-pen-nib"></i> Be the first to create a post!
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody> 
+                    </table>
+                </div>
+                <div id="discu" class="tab-pane fade table-responsive" role="tabpanel" aria-labelledby="v-pills-discussion-tab">
+                    <h3>Discussion</h3>
+                    <p>This category is for more general discussions.</p>
+                     
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col" class="d-none d-sm-table-cell">Author</th>
+                                <th scope="col">Date Posted</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in disc_posts %}
+                            <tr>
+                                <td scope="row">{{ post.post_title }}</td>
+                                <td class="d-none d-sm-table-cell"> {{ post.author }}</td>
+                                <td>{{ post.created_at | date:"M d, Y" }}</td>
+                                <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary">View</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No discussion posts available.</td>
+                            </tr>
+                             
+                            <tr>
+                                <td>
+                                    <a href="{% url 'new_post' %}" class="btn btn-basic">
+                                        <i class="fa-solid fa-pen-nib"></i> Be the first to create a post!
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="rant" class="tab-pane fade table-responsive" role="tabpanel" aria-labelledby="v-pills-rant-tab">
+                    <h3>Rant</h3>
+                    <p>This category is a safe space for users to complain about books!</p>
+                     
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col" class="d-none d-sm-table-cell">Author</th>
+                                <th scope="col">Date Posted</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in rant_posts %}
+                            <tr>
+                                <td scope="row">{{ post.post_title }}</td>
+                                <td class="d-none d-sm-table-cell">{{ post.author }}</td>
+                                <td>{{ post.created_at | date:"M d, Y" }}</td>
+                                <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary">View</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No rant posts available.</td>
+                            </tr>
+                             
+                            <tr>
+                                <td>
+                                    <a href="{% url 'new_post' %}" class="btn btn-basic">
+                                        <i class="fa-solid fa-pen-nib"></i> Be the first to create a post!
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tech" class="tab-pane fade table-responsive" role="tabpanel" aria-labelledby="v-pills-tech-tab">
+                    <h3>Gadgets & Tech</h3>
+                    <p>This category is for all the gadgets, tech or tips to help enhance the reading experience.</p>
+                     
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col" class="d-none d-sm-table-cell">Author</th>
+                                <th scope="col">Date Posted</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in gtech_posts %}
+                            <tr>
+                                <td scope="row">{{ post.post_title }}</td>
+                                <td class="d-none d-sm-table-cell">{{ post.author }}</td>
+                                <td>{{ post.created_at | date:"M d, Y" }}</td>
+                                <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary">View</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No gadgets & tech posts available.</td>
+                            </tr>
+                             
+                            <tr>
+                                <td>
+                                    <a href="{% url 'new_post' %}" class="btn btn-basic">
+                                        <i class="fa-solid fa-pen-nib"></i> Be the first to create a post!
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="hobbies" class="tab-pane fade table-responsive" role="tabpanel" aria-labelledby="v-pills-hobbies-tab">
+                    <h3>Hobbies</h3>
+                    <p>This category is for users that want to chat about something other than books and find friends with similar interests.</p>
+                     
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col" class="d-none d-sm-table-cell">Author</th>
+                                <th scope="col">Date Posted</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in hobbies_posts %}
+                            <tr>
+                                <td scope="row">{{ post.post_title }}</td>
+                                <td class="d-none d-sm-table-cell">{{ post.author }}</td>
+                                <td>{{ post.created_at | date:"M d, Y" }}</td>
+                                <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary">View</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No hobbies posts available.</td>
+                            </tr>
+                             
+                            <tr>
+                                <td>
+                                    <a href="{% url 'new_post' %}" class="btn btn-basic">
+                                        <i class="fa-solid fa-pen-nib"></i> Be the first to create a post!
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="writers" class="tab-pane fade table-responsive" role="tabpanel" aria-labelledby="v-pills-writers-tab">
+                    <h3>Writers</h3>
+                    <p>This category is for discussions that revolve around writers but also for our fellow author BookWyrms.</p>
+                     
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col" class="d-none d-sm-table-cell">Author</th>
+                                <th scope="col">Date Posted</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in writers_posts %}
+                            <tr>
+                                <td scope="row">{{ post.post_title }}</td>
+                                <td class="d-none d-sm-table-cell">{{ post.author }}</td>
+                                <td>{{ post.created_at | date:"M d, Y" }}</td>
+                                <td><a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary">View</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No writers posts available.</td>
+                            </tr>
+                             
+                            <tr>
+                                <td>
+                                    <a href="{% url 'new_post' %}" class="btn btn-basic">
+                                        <i class="fa-solid fa-pen-nib"></i> Be the first to create a post!
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="misc" class="tab-pane fade table-responsive" role="tabpanel" aria-labelledby="v-pills-misc-tab">
+                    <h3>Miscellaneous</h3>
+                    <p>Everything else...</p>
+                     
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col" class="d-none d-sm-table-cell">Author</th>
+                                <th scope="col">Date Posted</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in misc_posts %}
+                            <tr>
+                                <td scope="row">{{ post.post_title }}</td>
+                                <td class="d-none d-sm-table-cell">{{ post.author }}</td>
+                                <td>{{ post.created_at | date:"M d, Y" }}</td>
+                                <td><a href="{% url 'post_detail' post.slug %}" class="btn  btn-secondary">View</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No miscellaneous posts available.</td>
+                            </tr>
+                             
+                            <tr>
+                                <td>
+                                    <a href="{% url 'new_post' %}" class="btn btn-basic">
+                                        <i class="fa-solid fa-pen-nib"></i> Be the first to create a post!
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+{% endblock content %}

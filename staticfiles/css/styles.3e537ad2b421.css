@@ -146,20 +146,8 @@ h1, h2, h3 {
 .active, a:hover {
     color: #81FB60;
 }
-.nav-pills .nav-link.active, .nav-pills .show>.nav-link  {
-    background-color: #080b3e;
-    color: #FFDF6E;
-    border: 2px solid #ffc600;
-    font-weight: 900;
-}
-.nav-pills {
-    justify-content: left;
-    background: #13185D;
-    padding: 0;
-}
 .dropdown-item:hover {
     color: #201d3f;
-    background-color: #87d8d8;
 }
 .clean-link {
     text-decoration: none;
@@ -211,15 +199,4 @@ header {
 }
 .comment-user {
     padding: 6px;
-}
-/*Post list view tables and tabs*/
-.table-striped>tbody>tr:nth-of-type(odd)>* {
-    background-color: #FFDF6E;
-    color: #000000;
-    font-weight: 900;
-}
-.table-striped>tbody>tr:nth-of-type(even)>* {
-    background-color: #000000;
-    color: #FFDF6E;
-    font-weight: 900;
 }

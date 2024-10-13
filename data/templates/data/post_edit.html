@@ -1,1 +1,24 @@
-placeholder
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h2><i class="fa-solid fa-eraser"></i> Updating post...</h2>
+
+    <h3><i class="fa-regular fa-file-lines"></i> Post title: {{ post.post_title }}</h3>
+
+    <form method="POST" action="{% url 'edit_post' post.id %}">
+        {% csrf_token %}
+        {{ post_form|crispy }}
+        
+        <div>
+            <button type="submit" class="btn loader-button">
+                <i class="fa-solid fa-paper-plane"></i> Publish Edits
+            </button>
+
+            <button type="button" class="btn btn-danger" onclick="cancelEdit('{{ post.id }}')">
+                <i class="fa-solid fa-x"></i> Cancel Edits
+            </button>
+        </div>
+    </form>
+{% endblock content %}

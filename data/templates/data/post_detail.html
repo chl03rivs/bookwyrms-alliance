@@ -3,36 +3,76 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <div class="container-fluid">
+    <div class="container-fluid justify-content-left">
         <article class="post-detail">
-            <h1><i class="fa-regular fa-file-lines justify-content-left"></i> {{ post.post_title }}</h1>
-            <p class="post-meta">
-                <span>By {{ post.author }}</span> | 
-                <span>Published on {{ post.published_date|date:"F j, Y" }}</span>
-            </p>
+            <h2><i class="fa-regular fa-file-lines"></i> {{ post.post_title }}</h2>
+            
+            <div class="post-info">
+                <p>
+                    <span>By {{ post.author }} <i class="fa-solid fa-worm"></i></span> | 
+                    <span>Published on {{ post.created_at|date:"F j, Y" }}</span>
+                </p>
 
-            <p>
-                <span>Category: {{ post.category }}</span>
-                <!--<span>Book: {{post.linked_book}}</span>-->
-            </p>
+                <p>
+                    <span>Category: {{ post.category }}</span>
+                    <!--<span>Book: {{post.linked_book}}</span>-->
+                </p>
+            </div>
 
             <div class="post-content">
                 {{ post.body|linebreaks }}
             </div>
+            <!-- Edit and Delete buttons visible only for the post author or admins -->
+            {% if request.user == post.author or request.user.is_superuser %}
+                <div>
+                    <!-- Edit Button -->
+                    <a href="{% url 'post_edit' post.id %}" class="btn btn-basic">
+                        <i class="fa-solid fa-eraser"></i> Edit Post
+                    </a>
+                    
+                    <!-- Delete Button (triggers a confirmation modal) -->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal-{{ post.id }}">
+                        <i class="fa-solid fa-trash-can"></i> Delete Post
+                    </button>
+
+                    <!-- Include the delete modal for posts -->
+                    {% include 'data/confirm_delete.html' with object=post object_type='post' delete_url='post_delete' %}
+
+                </div>
+            {% endif %}
         </article>
         <hr>
         <!-- Comments Section -->
         <div class="container-fluid comments-section">
             <h2><i class="fa-regular fa-comment-dots"></i> Comments</h2>
             {% if post.comments.all %}
-                <ul>
+                <ul class="highlight">
                     {% for comment in post.comments.all %}
-                        <li>
-                            <img src="{{ profile.get_profile_image }}" class="img-fluid rounded" alt="{{ author.username }}'s profile picture">
-                            <p class="comment-author">
+                        <li class="row">
+                            <img src="{{ comment.author.userprofile.user_picture }}" class="comment-pic col-sm-6" alt="{{ this.author.username }}'s profile picture">
+                            <br>
+                            <p class="comment-author col-sm-6">
                                 <a href="{% url 'profile_detail' comment.author.id %}" >{{ comment.author }}</a> said on {{ comment.created_at|date:"F j, Y, g:i a" }}:
                             </p>
-                            <p class="comment">{{ comment.body|linebreaks }}</p>
+                            <div class="indent">{{ comment.body|linebreaks }}</div>
+
+                            <!-- Edit & Delete buttons visible only for the comment author or admin -->
+                            {% if request.user == comment.author or request.user.is_superuser %}
+                                <a href="{% url 'comment_edit' post.id comment.id %}" class="btn btn-basic" onclick="editComment('{{ comment.id }}')">
+                                    <i class="fa-solid fa-eraser"></i> Edit this Comment
+                                </a>
+                                
+                                <!-- Include the hidden edit form  template -->
+                                {% include 'data/comment_edit.html' %}
+
+                                <!-- Delete Comment Button (triggers a confirmation modal) -->
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCommentModal-{{ comment.id }}">
+                                    <i class="fa-solid fa-trash-can"></i> Delete this Comment
+                                </button>
+
+                                <!-- Include the delete modal for comments -->
+                                {% include 'data/confirm_delete.html' with object=comment object_type='comment' delete_url='comment_delete' %}
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>
@@ -41,29 +81,35 @@
             {% endif %}
         </div>
         <!-- Comment Creation Form -->
-        <div class="container-fluid d-flex">
+        <div class="indent container-fluid d-flex">
             {% if user.is_authenticated %}
             <div class="comment-author">
-                <img src="{{ user.userprofile.profile_picture }}" alt="{{ user.username }}" class="profile-picture">
+                <img src="{{ user.userprofile.user_picture }}" alt="{{ user.username }}" class="comment-pic">
             </div>
             <div class="comment-form">
                 <form method="POST" action="{% url 'new_comment' post.id %}">
                     {% csrf_token %}
                     <textarea name="comment" placeholder="Add a comment..." required></textarea>
-                    <button type="submit" class="btn">Submit Comment</button>
+                    <button type="submit" class="btn loader-button">
+                        <i class="fa-solid fa-paper-plane"></i> Post Comment
+                    </button>
                 </form>
             </div>
             {% else %}
                 <div class="comment-user">
                     <!-- Placeholder image for non-authenticated users -->
-                    <img src="{% static 'images/profile_gallery/placeholder_profile_picture.webp' %}" alt="Guest" class="comment-pic">
+                    <img src="{% static 'images/profile_gallery/no_account_picture.webp' %}" alt="Guest" class="comment-pic">
                 </div>
                 <div class="comment-form">
                     <form>
                         <textarea name="comment" placeholder="Sign in to add a comment..." disabled></textarea>
-                        <button type="submit" class="btn" disabled>Post comment <i class="fa-solid fa-paper-plane"></i></button>
+                        <button type="submit" class="btn" disabled>
+                            <i class="fa-solid fa-paper-plane"></i>Post comment
+                        </button>
                     </form>
-                    <a href="{% url 'account_login' %}" class="btn btn-sign-in">Sign In</a>
+                    <a href="{% url 'account_login' %}" class="btn btn-sign-in">
+                        <i class="fa-solid fa-book-open-reader"></i> Sign In
+                    </a>
                 </div>
             {% endif %}
         </div>

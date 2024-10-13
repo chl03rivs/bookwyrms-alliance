@@ -5,14 +5,19 @@ from cloudinary.models import CloudinaryField
 
 from users.models import UserProfile
 
-# Posts
-class Categories(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-
-    def __str__(self):
-        return self.name
-        
+# Posts        
 class Post(models.Model):
+    CATEGORY_CHOICES = [
+        ('opinion', 'Opinion'),
+        ('rec', 'Recommendation'),
+        ('disc', 'Discussion'),
+        ('rant', 'Rant'),
+        ('gtech', 'Gadgets & Tech'),
+        ('hobbies', 'Hobbies'),
+        ('writers', 'Writers'),
+        ('misc', 'Miscellaneous'),
+    ]
+
     author = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to the user's profile
     featured_image = CloudinaryField('image', default='placeholder')
     post_title = models.CharField(max_length=255)
@@ -22,7 +27,7 @@ class Post(models.Model):
     
     slug = models.SlugField(max_length=200, unique=True)
     body = models.TextField()
-    category = models.ForeignKey(Categories, on_delete=models.SET_NULL, null=True)  # Link to `Categories` model
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='discussion')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

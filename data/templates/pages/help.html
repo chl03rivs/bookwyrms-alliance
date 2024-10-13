@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
     <div class="container text-center">
@@ -32,13 +34,13 @@
     </section>
 
     <!-- FAQ Section -->
-    <section id="faq">
+    <section class="container-fluid" id="faq">
         <h2><i class="fa-regular fa-circle-question"></i> Frequently Asked Questions</h2>
         <p>Here you can list common questions and answers.</p>
     
         <details>
             <summary>How do I create an account?</summary>
-            <p>To create an account, click on the <i class="fa-solid fa-book"></i> book icon at the top right of the page and select "Register"</p>
+            <p>To create an account, click on the <i class="fa-solid fa-book"></i> book icon at the top right of the page and select "<i class="fa-solid fa-worm"></i> Register".</p>
             
             <p>You will need to fill in a brief form with your details. Once registered, you can log in <i class="fa-solid fa-book-open-reader"></i> and join the community discussions!</p>
         </details>
@@ -57,9 +59,16 @@
     
         <details>
             <summary>How can I post in the Community?</summary>
-            <p>Once you're logged in, go to the  <a href="{% url 'post_list' %}"><i class="fa-solid fa-mug-hot"></i> Community page</a> and click on "New Post" <i class="fa-solid fa-pen-nib"></i>.</p>
+            <p>Once you're logged in, you have two options:</p>
+
+            <ol>
+                <li>Go to the <a href="{% url 'post_list' %}"><i class="fa-solid fa-mug-hot"></i> Community page</a></li>
+                <li>Or, open the <strong><i class="fa-solid fa-book-open-reader"></i> Profile menu</strong> (top right of any page)</li>
+            </ol> 
+
+            <p>Then, you can click on "<i class="fa-solid fa-pen-nib"></i> New Post".</p>
             
-            <p>Fill in the post details and click "Submit" <i class="fa-solid fa-paper-plane"></i> to share it with others!</p>
+            <p>Fill in the post details and click "<i class="fa-solid fa-paper-plane"></i> Publish Post" to share it with others!</p>
         </details>
     
         <details>
@@ -72,11 +81,11 @@
             <p>Our team will review the report and take action if necessary.</p>
         </details>
     </section>
-
+    <br>
     <!-- Contact Section -->
-    <section id="contact">
+    <section class="container-fluid" id="contact">
         <h2><i class="fa-solid fa-envelope"></i> Contact Us</h2>
-        <form method="post">
+        <form method="POST">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="name" class="form-label">Your Name</label>
@@ -90,7 +99,9 @@
                 <label for="message" class="form-label">Message</label>
                 <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Submit <i class="fa-solid fa-paper-plane"></i></button>
+            <button type="submit" class="btn loader-button">
+                <i class="fa-solid fa-paper-plane"></i> Send
+            </button>
         </form>
     </section>
 

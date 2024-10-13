@@ -5,25 +5,25 @@
 {% block content %}
     <h2><i class="fa-solid fa-pen-nib"></i> New post</h2>
     <form method="POST" action="{% url 'new_post' post.id %}">
-                    {% csrf_token %}
-                    <textarea name="comment" placeholder="Add a comment..." required></textarea>
-                    <button type="submit" class="btn">Submit Comment</button>
-                </form>
-            </div>
-            {% else %}
-                <div class="comment-user">
-                    <!-- Placeholder image for non-authenticated users -->
-                    <img src="{% static 'images/profile_gallery/placeholder_profile_picture.webp' %}" alt="Guest" class="comment-pic">
-                </div>
-                <div class="comment-form">
-                    <form>
-                        <textarea name="comment" placeholder="Sign in to add a comment..." disabled></textarea>
-                        <button type="submit" class="btn" disabled>Publish Post <i class="fa-solid fa-paper-plane"></i></button>
-                    </form>
-                    <a href="{% url 'account_login' %}" class="btn btn-sign-in">Sign In</a>
-                </div>
-            {% endif %}
-        </div>
-    </div>
+        {% csrf_token %}
+        {{ form|crispy }}
 
+        <div>
+            <label for="id_category">Category</label>
+            <select id="id_category" class="form-control" name="category">
+                {% for key, value in form.category.field.choices %}
+                    <option value="{{ key }}" {% if form.category.value == key %}selected{% endif %}>
+                        {{ value }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <button type="submit" class="btn loader-button">
+                Publish Edits <i class="fa-solid fa-paper-plane"></i>
+                </button>
+    
+            <button type="button" class="btn btn-danger" onclick="cancelEdit('{{ post.id }}')">Cancel</button>
+        </div>
+    </form>
 {% endblock %}

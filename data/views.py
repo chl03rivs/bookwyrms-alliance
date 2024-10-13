@@ -54,11 +54,11 @@ def post_create(request):
     Uses template: `data/post_create.html`
     """
     if request.method == "POST":
-        post_form = PostForm(request.POST)
+        post_form = PostForm(request.POST, request.FILES)  # request.FILES to handle image upload
 
         if post_form.is_valid():
             post = post_form.save(commit=False)
-            post.author = request.user  # Set the current user as the post's author
+            post.author = request.user
             post.save()
             messages.success(request, "Post created successfully!")
             return HttpResponseRedirect(reverse('post_detail', args=[post.slug]))
@@ -119,8 +119,23 @@ class PostListView(generic.ListView):
     List view of the community posts
     """
     queryset = Post.objects.all()
-    template_name = 'templates/data/post_list.html'
+    template_name = 'data/post_list.html'
     context_object_name = 'posts'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Add category-filtered posts to the context
+        context['opinion_posts'] = Post.objects.filter(category='opinion')
+        context['rec_posts'] = Post.objects.filter(category='rec')
+        context['disc_posts'] = Post.objects.filter(category='disc')
+        context['rant_posts'] = Post.objects.filter(category='rant')
+        context['gtech_posts'] = Post.objects.filter(category='gtech')
+        context['hobbies_posts'] = Post.objects.filter(category='hobbies')
+        context['writers_posts'] = Post.objects.filter(category='writers')
+        context['misc_posts'] = Post.objects.filter(category='misc')
+
+        return context
 
 def post_detail(request, slug):
     """
@@ -248,7 +263,7 @@ def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
     # Only allow deletion if the current user is the author or a superuser
-    if post.authro != request.user and not request.user.is_superuser:
+    if post.author != request.user and not request.user.is_superuser:
         messages.error(request, "You are not authorized to delete this post.")
         return redirect('post_detail', slug=post.slug)
     
