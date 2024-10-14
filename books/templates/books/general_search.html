@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h2><i class="fa-solid fa-magnifying-glass"></i> Search Results for "{{ query }}"</h2>
+
+    <div id="general-search-results" class="container-fluid">
+        {% if books %}
+            <ul>
+                {% for book in books %}
+                    <li class="d-flex align-items-start book-results">
+                        <!-- Book Cover Image -->
+                        <div>
+                            {% if book.cover_image %}
+                                <img src="{{ book.cover_image }}" alt="Cover Image">
+                            {% else %}
+                                <img src="{% static 'images/no_cover.webp' %}" alt="Default Cover Image">
+                            {% endif %}
+                        </div>
+
+                        <!-- Book Details -->
+                        <div class="container-fluid">
+                            <strong>Title:</strong> {{ book.title }}<br>
+                            <strong>Author:</strong> {{ book.author|join:", " }}<br>
+                            <strong>Published Date:</strong> {{ book.publishedDate }}<br>
+                        </div>
+                    </li>
+                    <br>
+                    <!-- Related Posts Table -->
+                    <h4><i class="fa-regular fa-file-lines"></i> Related posts:</h4>
+                    <div class="table-responsive">
+                        <table class="table align-middle table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Post Title</th>
+                                    <th>Category</th>
+                                    <th class="d-none d-sm-table-cell">Author</th>
+                                    <th>Published Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for post in posts %}
+                                    {% if post.book_title == book.title %}
+                                    <tr>
+                                        <td>{{ post.post_title }}</td>
+                                        <td>{{ post.category }}</td>
+                                        <td class="d-none d-sm-table-cell">{{ post.author }}</td>
+                                        <td>{{ post.created_at|date:"M d, Y" }}</td>
+                                        <td>
+                                            <a href="{% url 'post_detail' post.slug %}" class="btn btn-secondary">View</a>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-align-center">No posts linking to this book.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr>
+                {% empty %}
+                    <p>No books found. Try a different search.</p>
+                    <hr>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <!-- General Search form -->
+    <div class="container-fluid search-form">
+        <h2><i class="fa-solid fa-magnifying-glass"></i> Search for something else?</h2>
+        <form method="GET" action="{% url 'general_search' %}">
+            <input type="text" id="general-book-search" name="q" value="{{ query }}" placeholder="Search for a book..." required>
+            <button type="submit" id="search-btn" class="btn-basic">Search</button>
+        </form>
+    </div>
+{% endblock %}

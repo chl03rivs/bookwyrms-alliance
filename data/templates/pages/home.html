@@ -16,11 +16,15 @@
     <div class="container text-center">
         <h2>Join Our Community!</h2>
         <div class="row align-items-center">
-            <p class="col">If you want to participate in a discussion about your favourite book, give your opinion on an overrated author or share your recipe for the perfect bookworm cookies.</p>
+            <div class="col-12 col-md-8 text-md-start"> <!-- Full width on small screens, 8 columns on medium and up -->
+                <p>If you want to participate in a discussion about your favourite book, give your opinion on an overrated author or share your recipe for the perfect bookworm cookies.</p>
+            </div>
             <!-- Register Button -->
-            <button type="button" class="col btn btn-basic" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i class="fa-solid fa-worm"></i> Register
-            </button>
+            <div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-start mt-2 mt-md-0"> <!-- Center on small screens, left aligned on larger -->
+                <button type="button" class="btn btn-basic" data-bs-toggle="modal" data-bs-target="#registerModal">
+                    <i class="fa-solid fa-worm"></i> Register
+                </button>
+            </div>
         </div>
 
         <!-- Modal -->

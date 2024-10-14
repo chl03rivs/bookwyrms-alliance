@@ -129,4 +129,30 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    // Add event listener to the search button
+    // Add event listener to the search button
+    const searchButton = document.querySelector('search-btn'); // Replace with your button's ID or class
+    const searchInput = document.getElementById('general-book-search');
+
+    if (searchButton) {
+        searchButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const query = searchInput.value;
+
+            // Make the AJAX call to search for books
+            fetch(`{% url 'general_search' %}?q=${query}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest', // AJAX header
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Debugging line to see the response
+                // The results will be updated automatically by the general_search template
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    }
 });

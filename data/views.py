@@ -56,14 +56,33 @@ def post_create(request):
     if request.method == "POST":
         post_form = PostForm(request.POST, request.FILES)  # request.FILES to handle image upload
 
+        # Book details from AJAX
+        book_title = request.POST.get('book_title')
+        book_authors = request.POST.get('book_authors')
+        book_cover = request.POST.get('book_cover')
+        book_genres = request.POST.get('book_genres')
+
         if post_form.is_valid():
             post = post_form.save(commit=False)
             post.author = request.user
+
+            # Add the book details to the post if they are available
+            if book_title:
+                post.book_title = book_title
+            if book_authors:
+                post.book_authors = book_authors
+            if book_cover:
+                post.book_cover = book_cover
+            if book_genres:
+                post.book_genres = book_genres
+
             post.save()
             messages.success(request, "Post created successfully!")
-            return HttpResponseRedirect(reverse('post_detail', args=[post.slug]))
+
+            # Redirect to the post detail page (assuming `post_detail` uses the post slug)
+            return redirect(reverse('post_detail', args=[post.slug]))
         else:
-            messages.error(request, "Error creating post. Please try again.")
+            messages.error(request, "Error creating post. Please check the form.")
     else:
         post_form = PostForm()
 

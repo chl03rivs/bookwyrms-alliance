@@ -19,12 +19,14 @@ from django.contrib import admin
 from django.urls import path, include
 
 from data import views as data_views
+from books.services.google_books import book_search
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('summernote/', include('django_summernote.urls')),
     path('accounts/', include('allauth.urls')),
     path('users/', include('users.urls')),
+    path('books/', include('books.urls')),
     path('', data_views.home_view, name='home'),
     path('help/', data_views.help_view, name='help'),
     path('community/', include('data.urls')),

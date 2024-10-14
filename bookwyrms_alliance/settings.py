@@ -60,7 +60,10 @@ INSTALLED_APPS = [
     'cloudinary',
     'data',
     'users',
+    'books',
 ]
+# Google Books API
+GOOGLE_BOOKS_API_KEY = os.environ.get('GOOGLE_BOOKS_API_KEY')
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"

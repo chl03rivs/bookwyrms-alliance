@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 
 from users.models import UserProfile
+from books.services.google_books import book_search
 
 # Posts        
 class Post(models.Model):
@@ -22,8 +23,11 @@ class Post(models.Model):
     featured_image = CloudinaryField('image', default='placeholder')
     post_title = models.CharField(max_length=255)
 
-    # Commented out for now, until Google Books API is connected 
-    # linked_book = models.ForeignKey(Book)
+    # Book fields to store the selected book's info
+    book_title = models.CharField(max_length=255, blank=True, null=True)
+    book_author = models.CharField(max_length=255, blank=True, null=True)
+    book_cover = models.URLField(blank=True, null=True)
+    book_genre = models.CharField(max_length=255, blank=True, null=True)
     
     slug = models.SlugField(max_length=200, unique=True)
     body = models.TextField()

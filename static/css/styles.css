@@ -1,5 +1,5 @@
 /*GENERAL STYLES*/
-* {
+*, body {
     font-family: "Space Mono", monospace;
     font-weight: 400;
     font-style: normal;
@@ -22,6 +22,7 @@ h1, h2, h3 {
     font-family: "Monofett", monospace;
     font-style: normal;
     color: #87d8d8;
+    padding: 1rem;
   }
 /*Icons*/
 .navbar-toggle {
@@ -30,12 +31,16 @@ h1, h2, h3 {
 #userNav i {
     background-color: #ffc600;
     color: #201d3f;
+    font-weight: 900;
     padding: 6px;
     border-radius: 2px;
 }
 .fa-solid {
     background-color: rgba(255, 255, 255, 0);
     color: #ffc600;
+}
+.fa-square-github {
+    font-size: x-large;
 }
 /*Buttons*/
 .btn-danger i {
@@ -143,8 +148,18 @@ h1, h2, h3 {
     transition: none !important;
 }
 /*LINKS*/
-.active, a:hover {
+.active, a:hover, a>i:hover {
     color: #81FB60;
+}
+#mainNav a, footer a {
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: #ffc600;
+}
+a {
+    color: #ffc600;
+    text-decoration: none;
+    font-weight: 900;
 }
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link  {
     background-color: #080b3e;
@@ -157,13 +172,10 @@ h1, h2, h3 {
     background: #13185D;
     padding: 0;
 }
-.dropdown-item:hover {
+#userNav a:hover {
     color: #201d3f;
-    background-color: #87d8d8;
-}
-.clean-link {
-    text-decoration: none;
-    color: #ffc600;
+    font-weight: 900;
+    background-color: #7a7a7e;
 }
 /*HEADER*/
 header {
@@ -222,4 +234,27 @@ header {
     background-color: #000000;
     color: #FFDF6E;
     font-weight: 900;
+}
+/*Search*/
+.book-results {
+    text-align: justify;
+    line-height: 1.8;
+}
+.search-form {
+    border: 3px solid #ffc600;
+    padding: 1rem;
+}
+.search-form h2, .search-form input {
+    background-color: #000000;
+}
+#general-search-results ul {
+    padding-left: 0;
+}
+/*FOOTER*/
+footer .social {
+    font-size: x-large;
+    padding: 1rem;
+}
+footer div:nth-child(3) {
+    padding: 0 1rem;
 }

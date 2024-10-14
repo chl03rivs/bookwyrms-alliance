@@ -6,9 +6,17 @@
     <h2>Browse the World Wide Worm!</h2>
 
     <div class="container text-center">                        
-        <p>Here you can access all the posts from our community! Have a look through a category or use the search bar to look for posts about a specific book.</p>
+        <p>Here you can access all the posts from our community! Have a look through a category below/</p>
+        
+        <p>Or, you can use this search bar to look for posts about a specific book.</p>
 
-        <!--Insert search bar here-->
+        <!--General search feature-->
+        <div class="container-fluid search-form">
+            <form method="GET" action="{% url 'general_search' %}">
+                <input type="text" id="community-book-search" name="q" placeholder="Search for a book..." required>
+                <button type="submit" class="btn-basic" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+            </form>
+        </div>
     </div>
 
     {% if user.is_authenticated %}
@@ -414,5 +422,5 @@
         </div>
     </div>    
 
-    <
-{% endblock content %}
+    <script src="{% static 'js/books.js' %}"></script>
+{% endblock %}
