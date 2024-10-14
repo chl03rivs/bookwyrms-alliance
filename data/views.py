@@ -2,6 +2,7 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -202,31 +203,14 @@ def comment_edit(request, slug, comment_id):
         messages.error(request, "You are not authorized to edit this comment.")
         return redirect('post_detail', slug=slug)
 
-    if request.method == "POST":
-        comment_form = CommentForm(request.POST, instance=comment)
+    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        data = json.loads(request.body)
+        comment.content = data.get('content', comment.content)
+        comment.save()
 
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.post = post  # Make sure to link the comment to the post
-            comment.save()
-
-            messages.success(request, "Comment updated successfully!")
-            return HttpResponseRedirect(reverse('post_detail', args=[slug]))
-        else:
-            messages.error(request, "Error updating comment. Please try again.")
-    else:
-        comment_form = CommentForm(instance=comment)
-
-    return render(
-        request,
-        'data/comment_edit.html',
-        {
-            'comment_form': comment_form,
-            'post': post,
-            'comment': comment,
-        }
-    )
-
+        return JsonResponse({'success': True, 'message': "Comment updated successfully!"})
+    
+    return JsonResponse({'success': False, 'error': "Invalid request"}, status=400)
 @login_required
 def post_edit(request, slug):
     """

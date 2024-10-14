@@ -1,11 +1,13 @@
-{% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 
 {% block content %}
+    <!-- Hidden Edit Form -->
     <div id="edit-comment-form-{{ comment.id }}" style="display: none;">
         <textarea id="edit-comment-content-{{ comment.id }}" rows="3">{{ comment.content }}</textarea>
-        <button type="button" class="btn btn-success" onclick="saveComment('{{ comment.id }}')">Save</button>
-        <button type="button" class="btn btn-secondary" onclick="cancelEdit('{{ comment.id }}')">Cancel</button>
+        <button type="button" class="btn btn-success" onclick="saveComment('{{ comment.id }}', '{{ post.slug }}')"><i class="fa-solid fa-paper-plane"></i> Publish changes</button>
+        <button type="button" class="btn btn-danger" onclick="cancelEdit('{{ comment.id }}')"><i class="fa-solid fa-x"></i> Cancel changes</button>
     </div>
+
+    <script src="{% static url 'js/data.js' %}"></script>
 {% endblock %}

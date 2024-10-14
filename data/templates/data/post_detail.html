@@ -25,19 +25,15 @@
             <!-- Edit and Delete buttons visible only for the post author or admins -->
             {% if request.user == post.author or request.user.is_superuser %}
                 <div>
-                    <!-- Edit Button -->
-                    <a href="{% url 'post_edit' post.id %}" class="btn btn-basic">
-                        <i class="fa-solid fa-eraser"></i> Edit Post
-                    </a>
+                    <!-- Edit Post Button -->
+                    <button type="button" class="btn btn-secondary edit-post-btn" onclick="editPost('{{ post.id }}')" aria-label="Edit post">
+                        <i class="fa-solid fa-eraser"></i> Edit this post
+                    </button>
                     
-                    <!-- Delete Button (triggers a confirmation modal) -->
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal-{{ post.id }}">
+                    <!-- Delete Button (triggers a confirmation message) -->
+                    <button type="button" class="btn btn-danger delete-content-btn" data-type="post" data-id="{{ post.id }}" onclick="deleteContent('post', '{{ post.id }}')">
                         <i class="fa-solid fa-trash-can"></i> Delete Post
                     </button>
-
-                    <!-- Include the delete modal for posts -->
-                    {% include 'data/confirm_delete.html' with object=post object_type='post' delete_url='post_delete' %}
-
                 </div>
             {% endif %}
         </article>
@@ -46,33 +42,41 @@
         <div class="container-fluid comments-section">
             <h2><i class="fa-regular fa-comment-dots"></i> Comments</h2>
             {% if post.comments.all %}
-                <ul class="highlight">
+                <ul class="highlight list-unstyled">
                     {% for comment in post.comments.all %}
-                        <li class="row">
-                            <img src="{{ comment.author.userprofile.user_picture }}" class="comment-pic col-sm-6" alt="{{ this.author.username }}'s profile picture">
-                            <br>
-                            <p class="comment-author col-sm-6">
-                                <a href="{% url 'profile_detail' comment.author.id %}" >{{ comment.author }}</a> said on {{ comment.created_at|date:"F j, Y, g:i a" }}:
-                            </p>
-                            <div class="indent">{{ comment.body|linebreaks }}</div>
+                        <li id="comment-{{ comment.id }}" class="row mb-4">
+                            <!-- Comment Author Info & Picture -->
+                            <div class="col-md-2 col-sm-12 text-center">
+                                <img src="{{ comment.author.userprofile.user_picture }}" class="comment-pic img-fluid" alt="{{ comment.author.username }}'s profile picture">
+                            </div>
 
-                            <!-- Edit & Delete buttons visible only for the comment author or admin -->
-                            {% if request.user == comment.author or request.user.is_superuser %}
-                                <a href="{% url 'comment_edit' post.id comment.id %}" class="btn btn-basic" onclick="editComment('{{ comment.id }}')">
-                                    <i class="fa-solid fa-eraser"></i> Edit this Comment
-                                </a>
-                                
-                                <!-- Include the hidden edit form  template -->
-                                {% include 'data/comment_edit.html' %}
+                            <!-- Comment Content -->
+                            <div class="col-md-10 col-sm-12">
+                                <p class="comment-author">
+                                    <a href="{% url 'profile_detail' comment.author.id %}">
+                                        {{ comment.author }}
+                                    </a> said on {{ comment.created_at|date:"F j, Y, g:i a" }}:
+                                </p>
+                                <div class="indent" id="comment-content-{{ comment.id }}">{{ comment.body|linebreaks }}</div>
 
-                                <!-- Delete Comment Button (triggers a confirmation modal) -->
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCommentModal-{{ comment.id }}">
-                                    <i class="fa-solid fa-trash-can"></i> Delete this Comment
-                                </button>
+                                <!--Visible only for the comment author or admin -->
+                                {% if request.user == comment.author or request.user.is_superuser %}
+                                    <div class="mt-2">
+                                        <!-- Edit Comment Button -->
+                                        <button type="button" class="btn btn-secondary edit-comment-btn" onclick="editComment('{{ post.id }}')" aria-label="Edit comment">
+                                            <i class="fa-solid fa-eraser"></i> Edit this Comment
+                                        </button>
 
-                                <!-- Include the delete modal for comments -->
-                                {% include 'data/confirm_delete.html' with object=comment object_type='comment' delete_url='comment_delete' %}
-                            {% endif %}
+                                        <!-- Delete Comment Button (triggers confirmation message) -->
+                                        <button type="button" class="btn btn-danger delete-content-btn" data-type="comment" data-id="{{ comment.id }}" onclick="deleteContent('comment', '{{ comment.id }}')">
+                                            <i class="fa-solid fa-trash-can"></i> Delete this Comment
+                                        </button>
+                                        
+                                        <!-- Include the hidden edit form template -->
+                                        {% include 'data/comment_edit.html' %}
+                                    </div>
+                                {% endif %}
+                            </div>
                         </li>
                     {% endfor %}
                 </ul>
@@ -80,6 +84,7 @@
                 <p>No comments yet... Be the first to comment!</p>
             {% endif %}
         </div>
+
         <!-- Comment Creation Form -->
         <div class="indent container-fluid d-flex">
             {% if user.is_authenticated %}
